@@ -1,1 +1,176 @@
-test html file in static dir
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroWaste Connect - Create Listing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            color: white;
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            color: #2d3748;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .photo-upload {
+            border: 2px dashed #cbd5e0;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        .photo-upload:hover {
+            border-color: #667eea;
+        }
+        
+        .photo-upload p {
+            color: #718096;
+            margin-top: 10px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🌱 ZeroWaste Connect</h1>
+        <div>
+            <a href="#">Browse</a>
+            <a href="#">My Listings</a>
+            <a href="#">Messages</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h2>Post a Food Listing</h2>
+        
+        <form>
+            <div class="form-group">
+                <label for="food-name">Food Name *</label>
+                <input type="text" id="food-name" placeholder="e.g., Fresh Apples, Homemade Bread" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" placeholder="Describe your food item, condition, packaging, etc."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="quantity">Quantity *</label>
+                <input type="text" id="quantity" placeholder="e.g., 5 apples, 1 loaf, 500g" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Upload Photo</label>
+                <div class="photo-upload">
+                    <p>📷 Click to upload or drag and drop</p>
+                    <p style="font-size: 12px; color: #a0aec0;">JPG, PNG up to 5MB</p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="best-before">Best Before Date *</label>
+                <input type="date" id="best-before" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="collection-location">Collection Location *</label>
+                <input type="text" id="collection-location" placeholder="e.g., SW1A 2AA, University Library entrance" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="collection-times">Collection Times *</label>
+                <input type="text" id="collection-times" placeholder="e.g., Weekdays 5-7pm, Saturday mornings" required>
+            </div>
+            
+            <button type="submit" class="btn">Post Listing</button>
+        </form>
+    </div>
+</body>
+</html>

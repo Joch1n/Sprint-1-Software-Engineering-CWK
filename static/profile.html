@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroWaste Connect - My Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            color: white;
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        
+        .profile-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .profile-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 15px;
+        }
+        
+        .profile-header h2 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .rating {
+            color: #f6ad55;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .stat-label {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .listings-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .section-header h3 {
+            color: #2d3748;
+            font-size: 20px;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .filter-btn {
+            padding: 8px 15px;
+            background: #edf2f7;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .listing-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: box-shadow 0.2s;
+        }
+        
+        .listing-item:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .listing-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+        }
+        
+        .listing-details {
+            flex: 1;
+        }
+        
+        .listing-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .listing-meta {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 3px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-badge.available {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+        
+        .status-badge.collected {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🌱 ZeroWaste Connect</h1>
+        <div>
+            <a href="#">Browse</a>
+            <a href="#">Post Listing</a>
+            <a href="#">Messages</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="avatar">👤</div>
+            <h2>Sanna Popal</h2>
+            <div class="rating">⭐⭐⭐⭐⭐ 4.8</div>
+            <p style="color: #718096;">Member since February 2026</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Items Shared</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Items Collected</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">Ratings</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="listings-section">
+            <div class="section-header">
+                <h3>My Listings</h3>
+                <div class="filter-buttons">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Available</button>
+                    <button class="filter-btn">Collected</button>
+                </div>
+            </div>
+            
+            <div class="listing-item">
+                <div class="listing-image">🍎</div>
+                <div class="listing-details">
+                    <div class="listing-name">Fresh Apples</div>
+                    <div class="listing-meta">Posted: 20 Mar 2026</div>
+                    <div class="listing-meta">Quantity: 10 apples</div>
+                    <span class="status-badge available">Available</span>
+                </div>
+            </div>
+            
+            <div class="listing-item">
+                <div class="listing-image">🍞</div>
+                <div class="listing-details">
+                    <div class="listing-name">Homemade Bread</div>
+                    <div class="listing-meta">Posted: 18 Mar 2026</div>
+                    <div class="listing-meta">Quantity: 2 loaves</div>
+                    <span class="status-badge collected">Collected</span>
+                </div>
+            </div>
+            
+            <div class="listing-item">
+                <div class="listing-image">🥕</div>
+                <div class="listing-details">
+                    <div class="listing-name">Fresh Vegetables</div>
+                    <div class="listing-meta">Posted: 15 Mar 2026</div>
+                    <div class="listing-meta">Quantity: Mixed bag</div>
+                    <span class="status-badge collected">Collected</span>
+                </div>
+            </div>
+            
+            <div class="listing-item">
+                <div class="listing-image">🧀</div>
+                <div class="listing-details">
+                    <div class="listing-name">Cheese Selection</div>
+                    <div class="listing-meta">Posted: 22 Mar 2026</div>
+                    <div class="listing-meta">Quantity: 500g</div>
+                    <span class="status-badge available">Available</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

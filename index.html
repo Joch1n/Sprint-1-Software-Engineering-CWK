@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ZeroWaste Connect – Share Food, Reduce Waste</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #2d6a4f;
+    --green-light: #52b788;
+    --green-pale: #d8f3dc;
+    --accent: #f4845f;
+    --bg: #f9faf7;
+    --text: #1b2d22;
+    --muted: #6b8f71;
+    --white: #ffffff;
+    --card-bg: #ffffff;
+    --radius: 16px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Satoshi', sans-serif; background: var(--bg); color: var(--text); }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 5%; background: var(--white);
+    border-bottom: 1px solid #e0ece3; position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--green); letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--green); }
+  .nav-btns { display: flex; gap: 0.8rem; }
+  .btn { padding: 0.55rem 1.3rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s; }
+  .btn-outline { border: 2px solid var(--green); color: var(--green); background: transparent; }
+  .btn-outline:hover { background: var(--green-pale); }
+  .btn-primary { background: var(--green); color: var(--white); }
+  .btn-primary:hover { background: #1f4d39; }
+
+  .hero {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+    align-items: center; padding: 6rem 5% 4rem; max-width: 1200px; margin: 0 auto;
+  }
+  .hero-text h1 {
+    font-family: 'Cabinet Grotesk', sans-serif; font-size: 3.2rem; font-weight: 800;
+    line-height: 1.1; letter-spacing: -1px; color: var(--text);
+  }
+  .hero-text h1 span { color: var(--green-light); }
+  .hero-text p { margin: 1.5rem 0 2rem; font-size: 1.1rem; color: var(--muted); line-height: 1.7; max-width: 480px; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-lg { padding: 0.85rem 2rem; font-size: 1rem; border-radius: 50px; font-weight: 700; cursor: pointer; text-decoration: none; border: none; transition: all 0.2s; }
+  .btn-lg.primary { background: var(--green); color: white; }
+  .btn-lg.primary:hover { background: #1f4d39; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,106,79,0.3); }
+  .btn-lg.secondary { background: var(--green-pale); color: var(--green); }
+  .btn-lg.secondary:hover { background: #b7e4c7; }
+
+  .hero-visual {
+    background: linear-gradient(135deg, var(--green-pale), #b7e4c7);
+    border-radius: 24px; padding: 2.5rem; display: flex; flex-direction: column; gap: 1rem;
+    box-shadow: 0 20px 60px rgba(45,106,79,0.12);
+  }
+  .food-card-mini {
+    background: white; border-radius: 12px; padding: 1rem 1.2rem;
+    display: flex; align-items: center; gap: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07); animation: floatIn 0.6s ease both;
+  }
+  .food-card-mini:nth-child(2) { animation-delay: 0.15s; margin-left: 1.5rem; }
+  .food-card-mini:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes floatIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .food-emoji { font-size: 2rem; }
+  .food-info { flex: 1; }
+  .food-info strong { display: block; font-size: 0.95rem; color: var(--text); }
+  .food-info span { font-size: 0.8rem; color: var(--muted); }
+  .tag { background: var(--green-pale); color: var(--green); font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 50px; }
+  .tag.urgent { background: #ffe8e0; color: var(--accent); }
+
+  .stats {
+    background: var(--green); color: white; padding: 3rem 5%;
+    display: flex; justify-content: center; gap: 5rem; flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat strong { display: block; font-family: 'Cabinet Grotesk', sans-serif; font-size: 2.5rem; font-weight: 800; }
+  .stat span { font-size: 0.95rem; opacity: 0.8; }
+
+  .how-it-works { padding: 5rem 5%; max-width: 1100px; margin: 0 auto; text-align: center; }
+  .section-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green-light); margin-bottom: 0.5rem; }
+  .section-title { font-family: 'Cabinet Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--text); margin-bottom: 3rem; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .step { background: var(--card-bg); border-radius: var(--radius); padding: 2rem; text-align: left; border: 1px solid #e0ece3; transition: transform 0.2s, box-shadow 0.2s; }
+  .step:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(45,106,79,0.1); }
+  .step-num { width: 42px; height: 42px; background: var(--green-pale); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; color: var(--green); font-size: 1.1rem; margin-bottom: 1.2rem; }
+  .step h3 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .step p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+  .listings-preview { padding: 4rem 5%; background: var(--green-pale); }
+  .listings-preview .section-title { text-align: center; }
+  .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; max-width: 1100px; margin: 0 auto; }
+  .listing-card { background: white; border-radius: var(--radius); overflow: hidden; border: 1px solid #e0ece3; transition: transform 0.2s, box-shadow 0.2s; }
+  .listing-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(45,106,79,0.12); }
+  .listing-img { height: 160px; background: linear-gradient(135deg, #b7e4c7, #74c69d); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+  .listing-body { padding: 1.2rem; }
+  .listing-body h4 { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700; margin-bottom: 0.3rem; }
+  .listing-body p { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.8rem; }
+  .listing-meta { display: flex; justify-content: space-between; align-items: center; }
+  .listing-meta span { font-size: 0.8rem; color: var(--muted); }
+  .btn-sm { padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; background: var(--green); color: white; border: none; cursor: pointer; text-decoration: none; }
+
+  .cta-section { padding: 5rem 5%; text-align: center; }
+  .cta-box { background: var(--green); border-radius: 24px; padding: 4rem; max-width: 700px; margin: 0 auto; color: white; }
+  .cta-box h2 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; }
+  .cta-box p { opacity: 0.85; margin-bottom: 2rem; font-size: 1rem; line-height: 1.6; }
+  .btn-white { background: white; color: var(--green); padding: 0.85rem 2rem; border-radius: 50px; font-weight: 700; border: none; cursor: pointer; font-size: 1rem; text-decoration: none; }
+  .btn-white:hover { background: var(--green-pale); }
+
+  footer {
+    background: var(--text); color: #a8c4ae; padding: 2rem 5%;
+    display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; flex-wrap: wrap; gap: 1rem;
+  }
+  footer .logo { color: white; }
+  footer a { color: #a8c4ae; text-decoration: none; margin-left: 1.5rem; }
+  footer a:hover { color: white; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">ZeroWaste<span>Connect</span></div>
+  <ul class="nav-links">
+    <li><a href="listings.html">Browse Food</a></li>
+    <li><a href="post-food.html">Share Food</a></li>
+    <li><a href="#">How It Works</a></li>
+  </ul>
+  <div class="nav-btns">
+    <a href="login.html" class="btn btn-outline">Log In</a>
+    <a href="register.html" class="btn btn-primary">Sign Up</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Share food.<br/>Cut waste.<br/><span>Build community.</span></h1>
+    <p>ZeroWaste Connect helps you share surplus food with people nearby — reducing food waste one meal at a time.</p>
+    <div class="hero-btns">
+      <a href="listings.html" class="btn-lg primary">Browse Listings</a>
+      <a href="post-food.html" class="btn-lg secondary">Share Food</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="food-card-mini">
+      <div class="food-emoji">🍞</div>
+      <div class="food-info">
+        <strong>Sourdough Loaf</strong>
+        <span>Hackney · 0.3 miles away</span>
+      </div>
+      <span class="tag urgent">Expiring Today</span>
+    </div>
+    <div class="food-card-mini">
+      <div class="food-emoji">🥗</div>
+      <div class="food-info">
+        <strong>Mixed Salad Box</strong>
+        <span>Brixton · 0.8 miles away</span>
+      </div>
+      <span class="tag">Free</span>
+    </div>
+    <div class="food-card-mini">
+      <div class="food-emoji">🍎</div>
+      <div class="food-info">
+        <strong>Apples & Oranges</strong>
+        <span>Peckham · 1.2 miles away</span>
+      </div>
+      <span class="tag">Free</span>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="stat"><strong>2,400+</strong><span>Food Items Shared</span></div>
+  <div class="stat"><strong>1,100+</strong><span>Active Members</span></div>
+  <div class="stat"><strong>850 kg</strong><span>Waste Prevented</span></div>
+</section>
+
+<section class="how-it-works">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Three simple steps</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h3>Create an Account</h3>
+      <p>Sign up for free in under a minute. Verify your email and you're ready to go.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h3>Post or Browse Food</h3>
+      <p>List surplus food you have, or browse what's available near you right now.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h3>Connect & Collect</h3>
+      <p>Message the donor, arrange a collection time, and reduce waste together.</p>
+    </div>
+  </div>
+</section>
+
+<section class="listings-preview">
+  <div class="section-label" style="text-align:center">Latest Listings</div>
+  <h2 class="section-title">Food available near you</h2>
+  <div class="listings-grid">
+    <div class="listing-card">
+      <div class="listing-img">🥩</div>
+      <div class="listing-body">
+        <h4>Chicken Portions</h4>
+        <p>Fresh chicken, use by tomorrow. Happy to leave at door.</p>
+        <div class="listing-meta"><span>📍 Tooting</span><a href="listings.html" class="btn-sm">View</a></div>
+      </div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-img">🍰</div>
+      <div class="listing-body">
+        <h4>Birthday Cake Slices</h4>
+        <p>Leftover from a party — chocolate sponge, 6 slices.</p>
+        <div class="listing-meta"><span>📍 Clapham</span><a href="listings.html" class="btn-sm">View</a></div>
+      </div>
+    </div>
+    <div class="listing-card">
+      <div class="listing-img">🥦</div>
+      <div class="listing-body">
+        <h4>Mixed Vegetables</h4>
+        <p>Broccoli, carrots, courgettes. All fresh, collected today.</p>
+        <div class="listing-meta"><span>📍 Streatham</span><a href="listings.html" class="btn-sm">View</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-box">
+    <h2>Ready to make a difference?</h2>
+    <p>Join thousands of people sharing food, saving money, and building a more sustainable community.</p>
+    <a href="register.html" class="btn-white">Get Started — It's Free</a>
+  </div>
+</section>
+
+<footer>
+  <div class="logo">ZeroWaste<span style="color:var(--green-light)">Connect</span></div>
+  <div>
+    <a href="#">About</a>
+    <a href="#">Privacy</a>
+    <a href="#">Contact</a>
+  </div>
+  <span>© 2025 ZeroWaste Connect. All rights reserved.</span>
+</footer>
+
+</body>
+</html>

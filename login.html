@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Log In – ZeroWaste Connect</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #2d6a4f; --green-light: #52b788; --green-pale: #d8f3dc;
+    --accent: #f4845f; --bg: #f9faf7; --text: #1b2d22; --muted: #6b8f71;
+    --white: #ffffff; --radius: 16px; --border: #e0ece3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Satoshi', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background: var(--white); border-bottom: 1px solid var(--border); }
+  .logo { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--green); text-decoration: none; }
+  .logo span { color: var(--accent); }
+
+  .page-wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 70px); }
+
+  .form-side { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 4rem 3rem; }
+  .form-box { width: 100%; max-width: 420px; }
+  .form-box h1 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .form-box .subtitle { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+  .form-box .subtitle a { color: var(--green); font-weight: 600; text-decoration: none; }
+
+  .form-group { margin-bottom: 1.2rem; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  input[type="email"], input[type="password"], input[type="text"] {
+    width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 0.95rem; font-family: 'Satoshi', sans-serif; background: white; color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  }
+  input:focus { border-color: var(--green-light); box-shadow: 0 0 0 3px rgba(82,183,136,0.15); }
+
+  .forgot { text-align: right; margin-top: 0.4rem; }
+  .forgot a { font-size: 0.8rem; color: var(--muted); text-decoration: none; }
+  .forgot a:hover { color: var(--green); }
+
+  .btn-submit {
+    width: 100%; padding: 0.85rem; background: var(--green); color: white; border: none;
+    border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer;
+    font-family: 'Satoshi', sans-serif; margin-top: 0.5rem; transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #1f4d39; box-shadow: 0 8px 24px rgba(45,106,79,0.3); transform: translateY(-1px); }
+
+  .divider { display: flex; align-items: center; gap: 1rem; margin: 1.5rem 0; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .divider span { font-size: 0.8rem; color: var(--muted); }
+
+  .btn-google {
+    width: 100%; padding: 0.75rem; background: white; color: var(--text);
+    border: 1.5px solid var(--border); border-radius: 50px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; font-family: 'Satoshi', sans-serif; display: flex; align-items: center; justify-content: center; gap: 0.6rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .btn-google:hover { border-color: var(--green-light); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+  .visual-side {
+    background: linear-gradient(160deg, #2d6a4f 0%, #40916c 50%, #52b788 100%);
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 4rem 3rem; color: white; text-align: center;
+  }
+  .visual-side .big-icon { font-size: 5rem; margin-bottom: 1.5rem; }
+  .visual-side h2 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
+  .visual-side p { opacity: 0.85; line-height: 1.7; max-width: 320px; font-size: 1rem; }
+  .visual-stats { display: flex; gap: 3rem; margin-top: 3rem; }
+  .v-stat strong { display: block; font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.8rem; font-weight: 800; }
+  .v-stat span { font-size: 0.8rem; opacity: 0.75; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">ZeroWaste<span>Connect</span></a>
+</nav>
+
+<div class="page-wrap">
+  <div class="form-side">
+    <div class="form-box">
+      <h1>Welcome back 👋</h1>
+      <p class="subtitle">Don't have an account? <a href="register.html">Sign up for free</a></p>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password"/>
+        <div class="forgot"><a href="#">Forgot password?</a></div>
+      </div>
+
+      <button class="btn-submit">Log In</button>
+
+      <div class="divider"><span>or continue with</span></div>
+
+      <button class="btn-google">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+        Continue with Google
+      </button>
+    </div>
+  </div>
+
+  <div class="visual-side">
+    <div class="big-icon">🌱</div>
+    <h2>Good to have you back!</h2>
+    <p>Log in to see the latest food listings near you and connect with your community.</p>
+    <div class="visual-stats">
+      <div class="v-stat"><strong>2,400+</strong><span>Items Shared</span></div>
+      <div class="v-stat"><strong>850 kg</strong><span>Waste Saved</span></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
