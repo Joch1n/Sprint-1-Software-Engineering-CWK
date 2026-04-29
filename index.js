@@ -1,6 +1,10 @@
 "use strict";
 
-// Include the app.js file.
-// This will run the code.
-console.log("entrypoint");
+console.log("Entrypoint started");
+
 const app = require("./app/app.js");
+
+const port = 3000;
+app.listen(port, () => {
+  console.log(`App running at http://localhost:${port}`);
+});
