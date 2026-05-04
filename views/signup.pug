@@ -1,0 +1,176 @@
+block content
+  style.
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f8f9fa;
+    }
+
+    .auth-box {
+      background: white;
+      padding: 50px 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .auth-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 900;
+      color: #2ecc71;
+      text-decoration: none;
+      margin-bottom: 20px;
+    }
+
+    .auth-logo i {
+      font-size: 28px;
+    }
+
+    .auth-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+
+    .auth-header p {
+      font-size: 16px;
+      color: #7f8c8d;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 14px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #2ecc71;
+    }
+
+    .terms-check {
+      margin-bottom: 20px;
+    }
+
+    .terms-check label {
+      display: flex;
+      gap: 8px;
+      font-size: 13px;
+      color: #7f8c8d;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: #2ecc71;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-submit:hover {
+      background: #27ae60;
+    }
+
+    .form-divider {
+      text-align: center;
+      margin: 20px 0;
+      color: #7f8c8d;
+    }
+
+    .btn-social {
+      width: 100%;
+      padding: 12px;
+      text-align: center;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      text-decoration: none;
+      display: block;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #7f8c8d;
+    }
+
+    .auth-link {
+      color: #2ecc71;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+  .auth-container
+    .auth-box
+      .auth-header
+        a.auth-logo(href="/")
+          i.fas.fa-leaf
+          | ZeroWaste Connect
+        h1 Join the Community
+        p Start sharing surplus food today
+
+      form.auth-form(method="POST", action="/signup")
+        .form-group
+          label(for="name") Full Name
+          input#name.form-input(type="text", name="name", placeholder="John Doe", required)
+
+        .form-group
+          label(for="email") Email Address
+          input#email.form-input(type="email", name="email", placeholder="your@email.com", required)
+
+        .form-group
+          label(for="password") Password
+          input#password.form-input(type="password", name="password", required)
+
+        .form-group
+          label(for="confirmPassword") Confirm Password
+          input#confirmPassword.form-input(type="password", name="confirmPassword", required)
+
+        .form-group
+          label(for="postcode") Postcode (Optional)
+          input#postcode.form-input(type="text", name="postcode", placeholder="e.g., SW1A 1AA")
+
+        .terms-check
+          label
+            input(type="checkbox", name="terms", required)
+            | I agree to the 
+            a(href="#") Terms of Service
+            |  and 
+            a(href="#") Privacy Policy
+
+        button.btn-submit(type="submit") Create Account
+
+        .form-divider
+          span or
+
+        a.btn-social(href="#") Sign up with Google
+
+      .auth-footer
+        p Already have an account?
+        a.auth-link(href="/login") Sign in here

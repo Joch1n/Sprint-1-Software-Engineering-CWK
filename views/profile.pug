@@ -1,0 +1,312 @@
+extends layout
+
+block content
+  .container-advanced(style="margin-top: 40px;")
+    // PROFILE HEADER
+    .stat-item(style="background: linear-gradient(135deg, #fff8f3 0%, #f8f9fa 100%); padding: 40px; border-radius: 12px; margin-bottom: 40px;")
+      .stat-info
+        h1.profile-name(style="font-size: 32px; margin-bottom: 15px;")
+          i.fas.fa-user-circle(style="margin-right: 10px;")
+          | Sarah Johnson
+        
+        p(style="font-size: 16px; color: var(--text-light); margin-bottom: 15px;")
+          i.fas.fa-map-pin(style="margin-right: 8px; color: var(--primary-color);")
+          | London, SW1A 1AA
+
+        .stats-bar(style="margin: 30px 0;")
+          .stat-item
+            .stat-info
+              .stat-number 12
+              .stat-label Active Listings
+          .stat-item
+            .stat-info
+              .stat-number 4.8
+              .stat-label Rating
+          .stat-item
+            .stat-info
+              .stat-number 247
+              .stat-label People Helped
+
+        .card-footer(style="margin-top: 20px;")
+          a.btn-primary(href="/my-listings", style="padding: 12px 25px;")
+            i.fas.fa-plus(style="margin-right: 8px;")
+            | Share Food
+          a.btn-secondary(href="/settings", style="padding: 12px 25px;")
+            i.fas.fa-cog(style="margin-right: 8px;")
+            | Edit Profile
+
+    // MY LISTINGS
+    .listings-section
+      .section-header
+        h2 My Food Listings
+        a.view-all(href="/my-listings")
+          i.fas.fa-arrow-right
+
+      .food-grid
+        .food-card-advanced
+          .card-image-container
+            img.card-image(src="https://images.unsplash.com/photo-1560806647-441ce23f6ef0?w=400&h=300&fit=crop", alt="Fresh Apples")
+            .card-badges
+              span.badge-category fruits
+              span.badge-fresh Available
+
+          .card-content
+            h3.card-title Fresh Apples
+            .rating
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star-half-alt
+              span.rating-text 4.8 (12 reviews)
+
+            p.card-description Crisp red apples from my garden. Harvested this morning, perfect for eating fresh.
+
+            .card-meta
+              .meta-item
+                i.fas.fa-map-pin
+                span SW1A 1AA
+              .meta-item
+                i.fas.fa-calendar
+                span 2 days ago
+              .meta-item
+                i.fas.fa-eye
+                span 24 views
+
+            .card-footer
+              a.btn-view(href="/item/1")
+                i.fas.fa-eye
+                | View Details
+              button.btn-favorite
+                i.fas.fa-edit
+
+        .food-card-advanced
+          .card-image-container
+            img.card-image(src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&h=300&fit=crop", alt="Homemade Bread")
+            .card-badges
+              span.badge-category baked
+              span.badge-fresh Available
+
+          .card-content
+            h3.card-title Homemade Bread
+            .rating
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star
+              span.rating-text 5 (28 reviews)
+
+            p.card-description Freshly baked sourdough bread, still warm from the oven. Made with organic flour.
+
+            .card-meta
+              .meta-item
+                i.fas.fa-map-pin
+                span SW1A 1AA
+              .meta-item
+                i.fas.fa-calendar
+                span 1 day ago
+              .meta-item
+                i.fas.fa-eye
+                span 45 views
+
+            .card-footer
+              a.btn-view(href="/item/2")
+                i.fas.fa-eye
+                | View Details
+              button.btn-favorite
+                i.fas.fa-edit
+
+        .food-card-advanced
+          .card-image-container
+            img.card-image(src="https://images.unsplash.com/photo-1571781926596-2657ed051abb?w=400&h=300&fit=crop", alt="Organic Tomatoes")
+            .card-badges
+              span.badge-category vegetables
+              span.badge-fresh Available
+
+          .card-content
+            h3.card-title Organic Tomatoes
+            .rating
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star
+              i.fas.fa-star-half-alt
+              span.rating-text 4.8 (19 reviews)
+
+            p.card-description Juicy vine-ripened tomatoes from greenhouse. Perfect for salads or cooking.
+
+            .card-meta
+              .meta-item
+                i.fas.fa-map-pin
+                span SW1A 1AA
+              .meta-item
+                i.fas.fa-calendar
+                span 3 days ago
+              .meta-item
+                i.fas.fa-eye
+                span 18 views
+
+            .card-footer
+              a.btn-view(href="/item/3")
+                i.fas.fa-eye
+                | View Details
+              button.btn-favorite
+                i.fas.fa-edit
+
+    // REVIEWS/FEEDBACK
+    .stat-item(style="margin-top: 40px; background: white; padding: 40px; border-radius: 12px; box-shadow: var(--shadow);")
+      .stat-info
+        h2(style="margin-bottom: 20px;") Community Reviews
+        
+        .card-content(style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;")
+          .rating
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            span(style="margin-left: 10px; font-weight: bold;") Emma Wilson
+          p(style="margin-top: 10px; color: var(--text-light);") "Fresh vegetables! Highly recommended. Great communication and friendly person."
+          p(style="font-size: 12px; color: var(--text-light);") 1 week ago
+
+        .card-content(style="border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px;")
+          .rating
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            span(style="margin-left: 10px; font-weight: bold;") James Brown
+          p(style="margin-top: 10px; color: var(--text-light);") "The best bread I've tasted in years. Will definitely order again!"
+          p(style="font-size: 12px; color: var(--text-light);") 2 weeks ago
+
+        .card-content
+          .rating
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            i.fas.fa-star
+            span(style="margin-left: 10px; font-weight: bold;") Lisa Anderson
+          p(style="margin-top: 10px; color: var(--text-light);") "Wonderful experience. Easy to arrange and very punctual!"
+          p(style="font-size: 12px; color: var(--text-light);") 3 weeks ago
+
+                    | View
+                  button.btn-edit
+                    i.fas.fa-edit
+                    | Edit
+      else
+        .empty-state
+          i.fas.fa-inbox
+          h3 No Listings Yet
+          p Start sharing food with your community!
+          a.btn-primary(href="/my-listings")
+            i.fas.fa-plus
+            | Create First Listing
+
+style
+  .profile-header {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+
+  .profile-cover {
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+
+  .profile-info {
+    padding: 0 30px 30px;
+    position: relative;
+    margin-top: -60px;
+  }
+
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid white;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .profile-name {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 15px 0 5px;
+    color: #2c3e50;
+  }
+
+  .profile-postcode {
+    color: #7f8c8d;
+    margin-bottom: 10px;
+  }
+
+  .profile-bio {
+    color: #5d6d7b;
+    margin-bottom: 20px;
+  }
+
+  .profile-stats {
+    display: flex;
+    gap: 30px;
+    margin: 25px 0;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2ecc71;
+  }
+
+  .stat-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 5px;
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .profile-listings {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .profile-listings h2 {
+    margin-bottom: 25px;
+    font-size: 24px;
+    color: #2c3e50;
+  }
+
+  @media (max-width: 768px) {
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+    }
+
+    .profile-name {
+      font-size: 24px;
+    }
+
+    .profile-stats {
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .profile-actions {
+      flex-direction: column;
+    }
+  }

@@ -1,28 +1,45 @@
-version: '3.3'
+
 services:
-  web:
-    build:
-      context: ./
-    volumes:
-      - .:/src
-    command: supervisor -e  'js,pug,html' index.js
+  app:
+    build: .
     ports:
-      - "3000:3000"
+      - "3000:3000"   # Express app accessible on localhost:3000
     depends_on:
       - db
-  db:
-    image: mysql
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: zerowaste
     restart: always
-    env_file:
-      - ./.env
-    ports:
-      - "3308:3306"
     volumes:
-      - ./db:/var/lib/mysql
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+      - .:/usr/src/app
+    command: ["node", "index.js"]
+
+  db:
+    image: mysql:8.0
+    container_name: zerowaste_db
     restart: always
-    env_file:
-      - ./.env
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: zerowaste
     ports:
-      - "8081:80"
+      - "3307:3306"  # Host port 3307 maps to container port 3306
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./sd2-db.sql:/docker-entrypoint-initdb.d/init.sql  # Initialize schema and data
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: zerowaste_pma
+    depends_on:
+      - db
+    ports:
+      - "8080:80"     # phpMyAdmin accessible on localhost:8080
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: password
+
+volumes:
+  db_data:

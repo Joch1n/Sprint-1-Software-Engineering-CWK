@@ -1,43 +1,47 @@
-console.log("THIS IS MY INDEX.JS RUNNING");
-"use strict";
-
+// index.js
 const express = require("express");
-const mysql = require("mysql2");
 const path = require("path");
+const mysql = require("mysql");
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(session({
-  secret: "secret123",
-  resave: false,
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    secret: "secret123",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
+// View engine
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-const db = mysql.createPool({
+// MySQL connection
+const db = mysql.createConnection({
   host: "127.0.0.1",
   user: "root",
-  password: "password",
+  password: "password", // make sure this matches your MySQL password
   database: "zerowaste",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
 });
 
-db.on("error", (err) => {
-  console.error("❌ Database error:", err.message);
+db.connect((err) => {
+  if (err) {
+    console.error("❌ Database connection failed:", err.message);
+    console.error("Make sure MySQL is running on localhost and credentials are correct");
+  } else {
+    console.log("✅ Connected to MySQL");
+  }
 });
 
-console.log("✅ Database pool created");
-
+// Routes
 app.get("/", (req, res) => {
   db.query("SELECT * FROM Food_Listings", (err, results) => {
     if (err) return res.status(500).send(err.message);
@@ -45,13 +49,9 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/login", (req, res) => {
-  res.render("login");
-});
+app.get("/login", (req, res) => res.render("login"));
 
-app.get("/signup", (req, res) => {
-  res.render("signup");
-});
+app.get("/signup", (req, res) => res.render("signup"));
 
 app.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
@@ -60,7 +60,10 @@ app.post("/signup", async (req, res) => {
   db.query(
     "INSERT INTO Users (username, email, password) VALUES (?, ?, ?)",
     [username, email, hash],
-    () => res.redirect("/login")
+    (err) => {
+      if (err) return res.status(500).send(err.message);
+      res.redirect("/login");
+    }
   );
 });
 
@@ -113,27 +116,22 @@ app.post("/items", (req, res) => {
     quantity,
     best_before,
     collection_location,
-    collection_times
+    collection_times,
   } = req.body;
 
   db.query(
     `INSERT INTO Food_Listings 
-    (food_name, description, quantity, best_before, collection_location, collection_times) 
-    VALUES (?, ?, ?, ?, ?, ?)`,
+      (food_name, description, quantity, best_before, collection_location, collection_times) 
+      VALUES (?, ?, ?, ?, ?, ?)`,
     [food_name, description, quantity, best_before, collection_location, collection_times],
-    () => res.redirect("/foodlistings")
+    (err) => {
+      if (err) return res.status(500).send(err.message);
+      res.redirect("/foodlistings");
+    }
   );
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
-});
-
-server.on("error", (err) => {
-  if (err.code === "EADDRINUSE") {
-    console.error(`❌ Port ${PORT} is already in use`);
-  } else {
-    console.error("Server error:", err);
-  }
-  process.exit(1);
+// Start server
+app.listen(PORT, () => {
+  console.log(` Server running on http://localhost:${PORT}`);
 });

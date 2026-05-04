@@ -1,0 +1,40 @@
+block content
+
+  // HERO SECTION
+  .hero-advanced
+    .hero-content
+      h1.hero-title Free food near you
+      p.hero-tagline Share more. Waste less.
+      p.hero-subtitle Discover food people are giving away in your area
+
+  // MAIN CONTAINER
+  .container-advanced
+
+    if listings.length === 0
+      .empty-state
+        h3 No food listings yet
+        p Be the first to share something!
+        a.btn-primary(href="/create") + Create Listing
+
+    else
+      .food-grid
+        each listing in listings
+          .food-card-advanced
+
+            .card-image-container
+              img.card-image(
+                src=listing.image || "https://via.placeholder.com/400x300"
+              )
+
+            .card-content
+              h3.card-title #{listing.food_name}
+
+              p.card-description #{listing.description}
+
+              .card-meta
+                span.meta-item 📍 #{listing.postcode}
+                span.meta-item 👤 #{listing.user_name || "User"}
+                span.meta-item ⭐ #{listing.rating || "New"}
+
+              .card-footer
+                a.btn-view(href=`/item/${listing.id}`) View
