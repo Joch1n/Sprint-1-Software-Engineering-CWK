@@ -118,6 +118,8 @@ CREATE TABLE favorites (
 CREATE TABLE messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
 
+    listing_id INT NOT NULL,
+
     sender_id INT NOT NULL,
 
     receiver_id INT NOT NULL,
@@ -132,8 +134,22 @@ CREATE TABLE messages (
 
     FOREIGN KEY (receiver_id)
     REFERENCES users(id)
+    ON DELETE CASCADE,
+
+    FOREIGN KEY (listing_id)
+    REFERENCES food_listings(id)
     ON DELETE CASCADE
 );
+
+-- ============================================
+-- SAMPLE MESSAGES
+-- ============================================
+
+INSERT INTO messages
+(listing_id, sender_id, receiver_id, message)
+VALUES
+(1, 2, 1, 'Hi Sarah, are the apples still available?'),
+(1, 1, 2, 'Yes, they are. You can collect them this afternoon.');
 
 -- ============================================
 -- SAMPLE USERS

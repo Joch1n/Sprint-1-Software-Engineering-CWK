@@ -64,12 +64,27 @@ block content
                     | Not Available
 
           .card-footer(style="display: flex; gap: 15px; justify-content: flex-start; flex-wrap: wrap;")
-            button.btn-primary(onclick="alert('Messaging can be added next sprint.')", style="flex: 0; padding: 14px 40px;")
+            a.btn-primary(href="#message-sharer", style="flex: 0; padding: 14px 40px;")
               i.fas.fa-envelope(style="margin-right: 10px;")
               | Message Sharer
             a.btn-secondary(href="/foodlistings", style="flex: 0; padding: 14px 40px;")
               i.fas.fa-arrow-left(style="margin-right: 10px;")
               | Back to Listings
+
+      .stat-item#message-sharer(style="max-width: 900px; margin: 0 auto 30px; background: #fff; padding: 25px; border-radius: 12px;")
+        .stat-info
+          h3(style="margin-bottom: 10px;") Message the Sharer
+          if messageStatus === "sent"
+            p(style="color: #27ae60; margin-bottom: 15px; font-weight: 600;") Message sent. Check your inbox for replies.
+          p(style="color: var(--text-light); margin-bottom: 15px;") Ask a question or arrange collection for #{item.food_name}.
+          if item.user_id === user.id
+            p(style="color: var(--text-light);") This is your listing, so collectors can message you from here.
+          else
+            form.auth-form(method="POST", action=`/item/${item.id}/message`)
+              .form-group
+                label(for="message") Message
+                textarea.form-input(id="message", name="message", rows="4", required, placeholder=`Hi ${item.owner_username || "there"}, is this still available?`)
+              button.btn-primary(type="submit", style="display: inline-block; padding: 10px 25px;") Send Message
 
       .stat-item(style="max-width: 900px; margin: 0 auto 40px; background: #fff; padding: 25px; border-radius: 12px;")
         .stat-info

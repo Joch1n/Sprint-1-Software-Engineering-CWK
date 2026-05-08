@@ -30,6 +30,10 @@ html
             a.nav-link(href="/foodlistings")
               i.fas.fa-utensils
               | Browse
+            if user
+              a.nav-link(href="/messages")
+                i.fas.fa-envelope
+                | Messages
             
             .user-menu
               if user

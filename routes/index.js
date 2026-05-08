@@ -40,6 +40,11 @@ function requireLogin(req, res, next) {
   next();
 }
 
+function requireLoginApi(req, res, next) {
+  if (!req.session.user) return res.status(401).json({ error: "Login required" });
+  next();
+}
+
 async function query(sql, params = []) {
   const [rows] = await db.query(sql, params);
   return rows;
@@ -205,59 +210,67 @@ app.get("/logout", (req, res) => {
 
 app.get("/foodlistings", requireLogin, async (req, res) => {
   try {
-    const search = (req.query.search || "").trim();
-    const postcode = (req.query.postcode || "").trim();
-    const radius = Number(req.query.radius || 10);
-    const params = [];
-    const conditions = ["status = 'available'"];
-
-    if (search) {
-      const like = `%${search}%`;
-      conditions.push("(food_name LIKE ? OR category LIKE ? OR postcode LIKE ?)");
-      params.push(like, like, like);
-    }
-
-    const listings = await query(
-      `SELECT * FROM food_listings WHERE ${conditions.join(" AND ")} ORDER BY created_at DESC`,
-      params
-    );
-
-    let locationText = null;
-    let filteredListings = listings;
-
-    if (postcode) {
-      const location = await geocodePostcode(postcode);
-      if (location) {
-        filteredListings = listings
-          .map((listing) => {
-            const distance = distanceMiles(location.lat, location.lon, listing.lat, listing.lon);
-            return {
-              ...listing,
-              distance,
-              distanceText: distance === null ? "Distance unavailable" : `${distance.toFixed(1)} miles away`
-            };
-          })
-          .filter((listing) => listing.distance === null || listing.distance <= radius)
-          .sort((a, b) => (a.distance ?? Number.MAX_VALUE) - (b.distance ?? Number.MAX_VALUE));
-        locationText = `Showing listings within ${radius} miles of ${postcode.toUpperCase()}`;
-      } else {
-        locationText = "Postcode could not be found by the location API.";
-      }
-    }
+    const listingResults = await getListingResults(req.query);
 
     res.render("foodlistings", {
-      listings: filteredListings,
+      listings: listingResults.listings,
       user: req.session.user,
-      search,
-      postcode,
-      radius,
-      locationText
+      search: listingResults.search,
+      postcode: listingResults.postcode,
+      radius: listingResults.radius,
+      locationText: listingResults.locationText
     });
   } catch (err) {
     console.error("Food listings error:", err);
     res.status(500).send("Database error");
   }
 });
+
+async function getListingResults(queryParams) {
+  const search = (queryParams.search || "").trim();
+  const postcode = (queryParams.postcode || "").trim();
+  const radius = Number(queryParams.radius || 10);
+  const params = [];
+  const conditions = ["status = 'available'"];
+
+  if (search) {
+    const like = `%${search}%`;
+    conditions.push("(food_name LIKE ? OR category LIKE ? OR postcode LIKE ?)");
+    params.push(like, like, like);
+  }
+
+  const listings = await query(
+    `SELECT * FROM food_listings WHERE ${conditions.join(" AND ")} ORDER BY created_at DESC`,
+    params
+  );
+
+  let locationText = null;
+  let filteredListings = listings;
+  let origin = null;
+
+  if (postcode) {
+    const location = await geocodePostcode(postcode);
+    if (location) {
+      origin = location;
+      filteredListings = listings
+        .map((listing) => {
+          const distance = distanceMiles(location.lat, location.lon, listing.lat, listing.lon);
+          return {
+            ...listing,
+            distance,
+            distanceText: distance === null ? "Distance unavailable" : `${distance.toFixed(1)} miles away`
+          };
+        })
+        .filter((listing) => listing.distance === null || listing.distance <= radius)
+        .sort((a, b) => (a.distance ?? Number.MAX_VALUE) - (b.distance ?? Number.MAX_VALUE));
+      locationText = `Showing listings within ${radius} miles of ${postcode.toUpperCase()}`;
+    } else {
+      locationText = "Postcode could not be found by the location API.";
+    }
+  }
+
+  return { listings: filteredListings, search, postcode, radius, locationText, origin };
+}
 
 app.get("/item/:id", requireLogin, async (req, res) => {
   try {
@@ -299,7 +312,8 @@ app.get("/item/:id", requireLogin, async (req, res) => {
       reviews,
       avgRating: averageRows[0].avgRating,
       user: req.session.user,
-      error: req.query.error || null
+      error: req.query.error || null,
+      messageStatus: req.query.message || null
     });
   } catch (err) {
     console.error("Item page error:", err);
@@ -329,6 +343,74 @@ app.post("/item/:id/review", requireLogin, async (req, res) => {
   } catch (err) {
     console.error("Review submit error:", err);
     res.redirect(`/item/${req.params.id}?error=Could not save review`);
+  }
+});
+
+app.get("/api/listings", requireLoginApi, async (req, res) => {
+  try {
+    const listingResults = await getListingResults(req.query);
+    res.json({
+      listings: listingResults.listings,
+      search: listingResults.search,
+      postcode: listingResults.postcode,
+      radius: listingResults.radius,
+      locationText: listingResults.locationText,
+      origin: listingResults.origin
+    });
+  } catch (err) {
+    console.error("Listings API error:", err);
+    res.status(500).json({ error: "Could not load listings" });
+  }
+});
+
+app.get("/api/item/:id/reviews", requireLoginApi, async (req, res) => {
+  try {
+    const reviews = await query(
+      `SELECT r.id, r.listing_id, r.rating, r.comment, r.created_at, u.username
+       FROM reviews r
+       JOIN users u ON r.reviewer_id = u.id
+       WHERE r.listing_id = ?
+       ORDER BY r.created_at DESC`,
+      [req.params.id]
+    );
+    const averageRows = await query(
+      "SELECT ROUND(AVG(rating), 1) AS avgRating, COUNT(*) AS reviewCount FROM reviews WHERE listing_id = ?",
+      [req.params.id]
+    );
+
+    res.json({
+      reviews,
+      avgRating: averageRows[0].avgRating,
+      reviewCount: averageRows[0].reviewCount
+    });
+  } catch (err) {
+    console.error("Reviews API error:", err);
+    res.status(500).json({ error: "Could not load reviews" });
+  }
+});
+
+app.post("/api/item/:id/reviews", requireLoginApi, async (req, res) => {
+  try {
+    const listingId = req.params.id;
+    const rating = Number(req.body.rating);
+    const comment = (req.body.comment || "").trim();
+
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5 || !comment) {
+      return res.status(400).json({ error: "Rating 1-5 and review comment are required" });
+    }
+
+    const listings = await query("SELECT id FROM food_listings WHERE id = ?", [listingId]);
+    if (!listings.length) return res.status(404).json({ error: "Item not found" });
+
+    const result = await query(
+      "INSERT INTO reviews (listing_id, reviewer_id, rating, comment) VALUES (?, ?, ?, ?)",
+      [listingId, req.session.user.id, rating, comment]
+    );
+
+    res.status(201).json({ id: result.insertId, listing_id: listingId, rating, comment });
+  } catch (err) {
+    console.error("Review API submit error:", err);
+    res.status(500).json({ error: "Could not save review" });
   }
 });
 
@@ -383,7 +465,7 @@ app.post("/create", requireLogin, upload.single("image"), async (req, res) => {
   }
 });
 
-app.get("/api/location", requireLogin, async (req, res) => {
+app.get("/api/location", requireLoginApi, async (req, res) => {
   try {
     const location = await geocodePostcode(req.query.postcode);
     if (!location) return res.status(404).json({ error: "Postcode not found" });
@@ -391,6 +473,202 @@ app.get("/api/location", requireLogin, async (req, res) => {
   } catch (err) {
     console.error("Location API error:", err);
     res.status(500).json({ error: "Location lookup failed" });
+  }
+});
+
+app.post("/item/:id/message", requireLogin, async (req, res) => {
+  try {
+    const listingId = req.params.id;
+    const message = (req.body.message || "").trim();
+
+    if (!message) return res.redirect(`/item/${listingId}?error=Message cannot be empty`);
+
+    const listings = await query(
+      "SELECT id, user_id FROM food_listings WHERE id = ?",
+      [listingId]
+    );
+
+    if (!listings.length) return res.status(404).send("Item not found");
+
+    const listing = listings[0];
+    if (listing.user_id === req.session.user.id) {
+      return res.redirect(`/item/${listingId}?error=You cannot message yourself about your own listing`);
+    }
+
+    await query(
+      "INSERT INTO messages (listing_id, sender_id, receiver_id, message) VALUES (?, ?, ?, ?)",
+      [listingId, req.session.user.id, listing.user_id, message]
+    );
+
+    res.redirect(`/item/${listingId}?message=sent`);
+  } catch (err) {
+    console.error("Message submit error:", err);
+    res.redirect(`/item/${req.params.id}?error=Could not send message`);
+  }
+});
+
+app.get("/messages", requireLogin, async (req, res) => {
+  try {
+    const conversations = await query(
+      `SELECT
+         m.listing_id,
+         f.food_name,
+         f.image,
+         CASE
+           WHEN m.sender_id = ? THEN m.receiver_id
+           ELSE m.sender_id
+         END AS other_user_id,
+         CASE
+           WHEN m.sender_id = ? THEN receiver.username
+           ELSE sender.username
+         END AS other_username,
+         MAX(m.created_at) AS last_message_at,
+         SUBSTRING_INDEX(GROUP_CONCAT(m.message ORDER BY m.created_at DESC SEPARATOR '||'), '||', 1) AS last_message
+       FROM messages m
+       JOIN users sender ON m.sender_id = sender.id
+       JOIN users receiver ON m.receiver_id = receiver.id
+       LEFT JOIN food_listings f ON m.listing_id = f.id
+       WHERE m.sender_id = ? OR m.receiver_id = ?
+       GROUP BY m.listing_id, f.food_name, f.image, other_user_id, other_username
+       ORDER BY last_message_at DESC`,
+      [req.session.user.id, req.session.user.id, req.session.user.id, req.session.user.id]
+    );
+
+    res.render("messages", {
+      user: req.session.user,
+      conversations,
+      thread: [],
+      activeConversation: null,
+      error: null
+    });
+  } catch (err) {
+    console.error("Messages page error:", err);
+    res.status(500).send("Could not load messages");
+  }
+});
+
+app.get("/messages/:listingId/:userId", requireLogin, async (req, res) => {
+  try {
+    const listingId = req.params.listingId;
+    const otherUserId = req.params.userId;
+
+    const conversations = await query(
+      `SELECT
+         m.listing_id,
+         f.food_name,
+         f.image,
+         CASE
+           WHEN m.sender_id = ? THEN m.receiver_id
+           ELSE m.sender_id
+         END AS other_user_id,
+         CASE
+           WHEN m.sender_id = ? THEN receiver.username
+           ELSE sender.username
+         END AS other_username,
+         MAX(m.created_at) AS last_message_at,
+         SUBSTRING_INDEX(GROUP_CONCAT(m.message ORDER BY m.created_at DESC SEPARATOR '||'), '||', 1) AS last_message
+       FROM messages m
+       JOIN users sender ON m.sender_id = sender.id
+       JOIN users receiver ON m.receiver_id = receiver.id
+       LEFT JOIN food_listings f ON m.listing_id = f.id
+       WHERE m.sender_id = ? OR m.receiver_id = ?
+       GROUP BY m.listing_id, f.food_name, f.image, other_user_id, other_username
+       ORDER BY last_message_at DESC`,
+      [req.session.user.id, req.session.user.id, req.session.user.id, req.session.user.id]
+    );
+
+    const thread = await query(
+      `SELECT m.*, sender.username AS sender_username, receiver.username AS receiver_username, f.food_name
+       FROM messages m
+       JOIN users sender ON m.sender_id = sender.id
+       JOIN users receiver ON m.receiver_id = receiver.id
+       LEFT JOIN food_listings f ON m.listing_id = f.id
+       WHERE m.listing_id = ?
+         AND ((m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?))
+       ORDER BY m.created_at ASC`,
+      [listingId, req.session.user.id, otherUserId, otherUserId, req.session.user.id]
+    );
+
+    const otherUsers = await query("SELECT id, username FROM users WHERE id = ?", [otherUserId]);
+    const listings = await query("SELECT id, food_name FROM food_listings WHERE id = ?", [listingId]);
+
+    res.render("messages", {
+      user: req.session.user,
+      conversations,
+      thread,
+      activeConversation: {
+        listingId,
+        otherUserId,
+        otherUsername: otherUsers[0] ? otherUsers[0].username : "User",
+        foodName: listings[0] ? listings[0].food_name : "Listing"
+      },
+      error: null
+    });
+  } catch (err) {
+    console.error("Message thread error:", err);
+    res.status(500).send("Could not load message thread");
+  }
+});
+
+app.post("/messages/:listingId/:userId", requireLogin, async (req, res) => {
+  try {
+    const listingId = req.params.listingId;
+    const receiverId = req.params.userId;
+    const message = (req.body.message || "").trim();
+
+    if (!message) return res.redirect(`/messages/${listingId}/${receiverId}`);
+
+    await query(
+      "INSERT INTO messages (listing_id, sender_id, receiver_id, message) VALUES (?, ?, ?, ?)",
+      [listingId, req.session.user.id, receiverId, message]
+    );
+
+    res.redirect(`/messages/${listingId}/${receiverId}`);
+  } catch (err) {
+    console.error("Message reply error:", err);
+    res.redirect("/messages");
+  }
+});
+
+app.get("/api/messages", requireLoginApi, async (req, res) => {
+  try {
+    const messages = await query(
+      `SELECT m.*, f.food_name, sender.username AS sender_username, receiver.username AS receiver_username
+       FROM messages m
+       LEFT JOIN food_listings f ON m.listing_id = f.id
+       JOIN users sender ON m.sender_id = sender.id
+       JOIN users receiver ON m.receiver_id = receiver.id
+       WHERE m.sender_id = ? OR m.receiver_id = ?
+       ORDER BY m.created_at DESC`,
+      [req.session.user.id, req.session.user.id]
+    );
+
+    res.json({ messages });
+  } catch (err) {
+    console.error("Messages API error:", err);
+    res.status(500).json({ error: "Could not load messages" });
+  }
+});
+
+app.post("/api/messages", requireLoginApi, async (req, res) => {
+  try {
+    const listingId = req.body.listing_id;
+    const receiverId = req.body.receiver_id;
+    const message = (req.body.message || "").trim();
+
+    if (!listingId || !receiverId || !message) {
+      return res.status(400).json({ error: "listing_id, receiver_id and message are required" });
+    }
+
+    const result = await query(
+      "INSERT INTO messages (listing_id, sender_id, receiver_id, message) VALUES (?, ?, ?, ?)",
+      [listingId, req.session.user.id, receiverId, message]
+    );
+
+    res.status(201).json({ id: result.insertId, listing_id: listingId, receiver_id: receiverId, message });
+  } catch (err) {
+    console.error("Message API submit error:", err);
+    res.status(500).json({ error: "Could not send message" });
   }
 });
 
