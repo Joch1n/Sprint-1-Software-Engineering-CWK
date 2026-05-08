@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"   # Express app accessible on localhost:3000
+      - "3001:3001"   # Express app accessible on localhost:3001
     depends_on:
       - db
     environment:
@@ -14,7 +14,7 @@ services:
     restart: always
     volumes:
       - .:/usr/src/app
-    command: ["node", "index.js"]
+    command: ["node", "server.js"]
 
   db:
     image: mysql:8.0

@@ -8,8 +8,14 @@ const bcrypt = require("bcrypt");
 const multer = require("multer");
 const session = require("express-session");
 
-// =========================
-// MIDDLEWARE
+console.log("INDEX.JS RUNNING");
+
+//Css styling
+app.set("view engine", "pug");
+app.set("views", path.join(__dirname, "../views"));
+
+
+// static files
 // =========================
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.urlencoded({ extended: true }));
@@ -125,10 +131,18 @@ app.get("/foodlistings", (req, res) => {
   });
 });
 
+app.get("/item:id", (req, res) => {
+  const item = mockListings.find(l => l.id == req.params.id);
+
+  if(!item) return res.send("Item not found");
+
+  res.render("item", { item, user: req.session.user });
+});
+
 // VIEW ALL ITEMS FROM DB
 app.get("/items", async (req, res) => {
   const items = await db.query("SELECT * FROM items");
-  res.render("items", { items, user: req.session.user });
+  res.render("items", { item, user: req.session.user });
 });
 
 // CREATE FORM PAGE
@@ -156,7 +170,7 @@ app.post("/items", upload.single("photo"), async (req, res) => {
     [food_name, description, quantity, best_before, collection_location, collection_times, photo]
   );
 
-  res.redirect("/foodlistings"); // 👈 better UX
+  res.redirect("/foodlistings"); // 
 });
 
 // =========================

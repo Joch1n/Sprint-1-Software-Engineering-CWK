@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  .container
+    h1= item.food_name
+
+    img(
+      src=item.image || "https://via.placeholder.com/400x300"
+      style="width:400px;border-radius:10px;"
+    )
+
+    p #{item.description}
+
+    p
+      strong Postcode:
+      |  #{item.postcode}

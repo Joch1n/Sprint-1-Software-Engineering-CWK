@@ -1,3 +1,5 @@
+extends layout
+
 block content
 
   // HERO SECTION
@@ -23,18 +25,18 @@ block content
 
             .card-image-container
               img.card-image(
-                src=listing.image || "https://via.placeholder.com/400x300"
+                src=listing.photo_url || "https://via.placeholder.com/400x300"
               )
 
             .card-content
               h3.card-title #{listing.food_name}
 
-              p.card-description #{listing.description}
+              p.card-description #{listing.description || "No description available"}
 
               .card-meta
-                span.meta-item 📍 #{listing.postcode}
-                span.meta-item 👤 #{listing.user_name || "User"}
-                span.meta-item ⭐ #{listing.rating || "New"}
+                span.meta-item 📍 #{listing.collection_location || "Suggested location"}
+                span.meta-item 👤 Community User
+                span.meta-item ⭐ Available
 
               .card-footer
                 a.btn-view(href=`/item/${listing.id}`) View
