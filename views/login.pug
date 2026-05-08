@@ -121,6 +121,9 @@ block content
         h1 Welcome Back
         p Sign in to start sharing
 
+      if error
+        p(style="color: #c0392b; margin-bottom: 16px; font-weight: 600;")= error
+
       form.auth-form(method="POST", action="/login")
         .form-group
           label(for="email") Email Address
@@ -141,7 +144,7 @@ block content
         .form-divider
           span or
 
-        a.btn-social(href="#") Sign in with Google
+        p(style="font-size: 13px; color: #7f8c8d; text-align: center;") Demo login: sarah@example.com / password123
 
       .auth-footer
         p No account yet?

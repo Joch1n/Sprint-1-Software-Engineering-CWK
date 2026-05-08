@@ -135,10 +135,13 @@ block content
         h1 Join the Community
         p Start sharing surplus food today
 
+      if error
+        p(style="color: #c0392b; margin-bottom: 16px; font-weight: 600;")= error
+
       form.auth-form(method="POST", action="/signup")
         .form-group
-          label(for="name") Full Name
-          input#name.form-input(type="text", name="name", placeholder="John Doe", required)
+          label(for="username") Username
+          input#username.form-input(type="text", name="username", placeholder="Sarah", required)
 
         .form-group
           label(for="email") Email Address
@@ -169,7 +172,7 @@ block content
         .form-divider
           span or
 
-        a.btn-social(href="#") Sign up with Google
+        p(style="font-size: 13px; color: #7f8c8d; text-align: center;") New accounts open the listings page after signup.
 
       .auth-footer
         p Already have an account?

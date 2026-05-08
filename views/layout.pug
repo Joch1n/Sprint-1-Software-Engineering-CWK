@@ -35,7 +35,7 @@ html
               if user
                 .user-info
                   img.avatar(src=user.avatar || "https://via.placeholder.com/40")
-                  span.username #{user.name}
+                  span.username #{user.username || user.name}
                 .dropdown-menu
                   a.dropdown-item(href="/profile")
                     i.fas.fa-user

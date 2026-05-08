@@ -3,45 +3,58 @@ extends layout
 block content
   .container-advanced(style="margin-top: 40px;")
     if item
-      .food-card-advanced(style="max-width: 900px; margin: 0 auto;")
+      .food-card-advanced(style="max-width: 900px; margin: 0 auto 30px;")
         .card-image-container(style="height: 400px;")
           img.card-image(src=item.image || "https://via.placeholder.com/900x400?text=Food+Item", alt=item.food_name, style="height: 100%; object-fit: cover;")
           .card-badges
             span.badge-category= item.category || "Food"
-            if item.status === 'available'
+            if item.status === "available"
               span.badge-fresh Available
 
         .card-content(style="padding: 40px;")
           h1.card-title(style="font-size: 36px; margin-bottom: 20px;")= item.food_name
-          
+
           .rating(style="margin-bottom: 20px;")
             i.fas.fa-star
-            i.fas.fa-star
-            i.fas.fa-star
-            i.fas.fa-star
-            i.fas.fa-star-half-alt
-            span.rating-text 4.8 (32 reviews)
+            span.rating-text #{avgRating || "No"} average rating (#{reviews.length} reviews)
 
           p.card-description(style="font-size: 16px; line-height: 1.8; margin-bottom: 30px;")= item.description
 
-          // DETAILS SECTION
           .card-meta(style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; padding: 30px 0; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); margin: 30px 0;")
             .meta-item(style="display: flex; flex-direction: column; gap: 10px;")
               strong Location
               .meta-item
                 i.fas.fa-map-pin(style="margin-right: 10px;")
                 span= item.postcode || "Not specified"
-            
+
             .meta-item(style="display: flex; flex-direction: column; gap: 10px;")
               strong Posted By
               .meta-item
                 i.fas.fa-user(style="margin-right: 10px;")
-                span= item.user_name || "Community Member"
-            
+                span= item.owner_username || "Community Member"
+
+            .meta-item(style="display: flex; flex-direction: column; gap: 10px;")
+              strong Category
+              .meta-item
+                i.fas.fa-tag(style="margin-right: 10px;")
+                span= item.category || "Food"
+
+            .meta-item(style="display: flex; flex-direction: column; gap: 10px;")
+              strong Quantity
+              .meta-item
+                i.fas.fa-box(style="margin-right: 10px;")
+                span= item.quantity || "Not specified"
+
+            .meta-item(style="display: flex; flex-direction: column; gap: 10px;")
+              strong Expiry Date
+              .meta-item
+                i.fas.fa-calendar(style="margin-right: 10px;")
+                span= item.expiry_date ? item.expiry_date.toISOString().slice(0, 10) : "Not specified"
+
             .meta-item(style="display: flex; flex-direction: column; gap: 10px;")
               strong Status
               .meta-item
-                if item.status === 'available'
+                if item.status === "available"
                   span.badge-fresh(style="display: inline-block;")
                     i.fas.fa-check(style="margin-right: 5px;")
                     | Available
@@ -50,32 +63,52 @@ block content
                     i.fas.fa-lock(style="margin-right: 5px;")
                     | Not Available
 
-          // ACTION BUTTONS
-          .card-footer(style="display: flex; gap: 15px; justify-content: flex-start;")
-            button.btn-primary(onclick="alert('Contact feature coming soon!')", style="flex: 0; padding: 14px 40px;")
+          .card-footer(style="display: flex; gap: 15px; justify-content: flex-start; flex-wrap: wrap;")
+            button.btn-primary(onclick="alert('Messaging can be added next sprint.')", style="flex: 0; padding: 14px 40px;")
               i.fas.fa-envelope(style="margin-right: 10px;")
               | Message Sharer
-            button.btn-secondary(onclick="alert('Bookmark feature coming soon!')", style="flex: 0; padding: 14px 40px;")
-              i.fas.fa-bookmark(style="margin-right: 10px;")
-              | Save Item
             a.btn-secondary(href="/foodlistings", style="flex: 0; padding: 14px 40px;")
               i.fas.fa-arrow-left(style="margin-right: 10px;")
               | Back to Listings
 
-          // COMMUNITY SECTION
-          .stat-item(style="margin-top: 40px; background: #f8f9fa; padding: 25px; border-radius: 12px;")
-            .stat-info
-              h3(style="margin-bottom: 10px;") Join Our Community
-              p(style="color: var(--text-light); margin-bottom: 15px;") Share surplus food, reduce waste, and help your neighbors
-              a.btn-primary(href="/register", style="display: inline-block; padding: 10px 25px;")
-                i.fas.fa-user-plus(style="margin-right: 8px;")
-                | Get Started Free
+      .stat-item(style="max-width: 900px; margin: 0 auto 40px; background: #fff; padding: 25px; border-radius: 12px;")
+        .stat-info
+          h3(style="margin-bottom: 10px;") Reviews
+          if avgRating
+            p(style="color: var(--text-light); margin-bottom: 15px;") Average rating: #{avgRating}/5
+          else
+            p(style="color: var(--text-light); margin-bottom: 15px;") No reviews yet.
+
+          if error
+            p(style="color: #c0392b; margin-bottom: 15px;")= error
+
+          form.auth-form(method="POST", action=`/item/${item.id}/review`, style="margin-bottom: 25px;")
+            .form-group
+              label(for="rating") Rating
+              select.form-input(id="rating", name="rating", required)
+                option(value="") Choose rating
+                option(value="5") 5 - Excellent
+                option(value="4") 4 - Good
+                option(value="3") 3 - Okay
+                option(value="2") 2 - Poor
+                option(value="1") 1 - Bad
+            .form-group
+              label(for="comment") Review
+              textarea.form-input(id="comment", name="comment", rows="4", required, placeholder="Write a short review")
+            button.btn-primary(type="submit", style="display: inline-block; padding: 10px 25px;") Submit Review
+
+          if reviews.length
+            each review in reviews
+              .listing
+                strong= review.username
+                span.rating-text  rated #{review.rating}/5 on #{review.created_at.toISOString().slice(0, 10)}
+                p= review.comment
 
     else
       .empty-state(style="padding: 100px 20px;")
         i.fas.fa-question-circle(style="font-size: 80px; margin-bottom: 20px;")
         h3 Item Not Found
-        p The food item you're looking for is no longer available
+        p The food item you're looking for is no longer available.
         a.btn-primary(href="/foodlistings", style="display: inline-block; margin-top: 20px;")
           i.fas.fa-arrow-left(style="margin-right: 8px;")
           | Back to Listings

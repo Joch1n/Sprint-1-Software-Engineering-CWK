@@ -2,41 +2,64 @@ extends layout
 
 block content
 
-  // HERO SECTION
   .hero-advanced
     .hero-content
       h1.hero-title Free food near you
       p.hero-tagline Share more. Waste less.
       p.hero-subtitle Discover food people are giving away in your area
 
-  // MAIN CONTAINER
   .container-advanced
+    .search-filter-section
+      form.search-container(method="GET", action="/foodlistings")
+        input.search-box(type="text", name="search", placeholder="Search by food, category or postcode", value=search || "")
+        input.search-box(type="text", name="postcode", placeholder="Nearby postcode", value=postcode || "")
+        select.filter-select(name="radius")
+          option(value="5", selected=String(radius || "10") === "5") 5 miles
+          option(value="10", selected=String(radius || "10") === "10") 10 miles
+          option(value="25", selected=String(radius || "10") === "25") 25 miles
+        button.search-btn(type="submit")
+          i.fas.fa-search
+          | Search
+
+      if locationText
+        p.card-description= locationText
+
+      .card-footer
+        a.btn-primary(href="/create") + Create Listing
 
     if listings.length === 0
       .empty-state
-        h3 No food listings yet
-        p Be the first to share something!
+        h3 No food listings found
+        p Try another search or be the first to share something.
         a.btn-primary(href="/create") + Create Listing
 
     else
       .food-grid
         each listing in listings
           .food-card-advanced
-
             .card-image-container
-              img.card-image(
-                src=listing.photo_url || "https://via.placeholder.com/400x300"
-              )
+              img.card-image(src=listing.image || "https://via.placeholder.com/400x300?text=Food+Listing", alt=listing.food_name)
+              .card-badges
+                span.badge-category= listing.category || "Food"
+                if listing.status === "available"
+                  span.badge-fresh Available
 
             .card-content
-              h3.card-title #{listing.food_name}
-
-              p.card-description #{listing.description || "No description available"}
+              h3.card-title= listing.food_name
+              p.card-description= listing.description || "No description available"
 
               .card-meta
-                span.meta-item 📍 #{listing.collection_location || "Suggested location"}
-                span.meta-item 👤 Community User
-                span.meta-item ⭐ Available
+                span.meta-item
+                  i.fas.fa-map-pin
+                  | #{listing.postcode || "No postcode"}
+                span.meta-item
+                  i.fas.fa-box
+                  | #{listing.quantity || "Quantity not set"}
+                span.meta-item
+                  i.fas.fa-location-arrow
+                  | #{listing.distanceText || "Location listed"}
 
               .card-footer
-                a.btn-view(href=`/item/${listing.id}`) View
+                a.btn-view(href=`/item/${listing.id}`)
+                  i.fas.fa-eye
+                  | View

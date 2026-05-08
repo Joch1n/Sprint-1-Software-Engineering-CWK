@@ -28,5 +28,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run app check
-      run: node index.js
+    - name: Run tests
+      run: npm test
+
+    - name: Build Docker image
+      run: docker build .

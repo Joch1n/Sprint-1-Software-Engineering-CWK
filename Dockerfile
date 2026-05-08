@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 3001
 
 # Run the server
-CMD ["node", "index.js"]
+CMD ["node", "server.js"]

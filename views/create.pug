@@ -1,0 +1,45 @@
+extends layout
+
+block content
+  .auth-container
+    .auth-box(style="max-width: 720px;")
+      .auth-header
+        a.auth-logo(href="/")
+          i.fas.fa-leaf
+          span ZeroWaste Connect
+        h1 Create Listing
+        p Share surplus food with people nearby.
+
+      if error
+        p(style="color: #c0392b; margin-bottom: 15px;")= error
+
+      form.auth-form(method="POST", action="/create", enctype="multipart/form-data")
+        .form-group
+          label(for="food_name") Food name
+          input.form-input(id="food_name", type="text", name="food_name", required)
+
+        .form-group
+          label(for="description") Description
+          textarea.form-input(id="description", name="description", rows="4", required)
+
+        .form-group
+          label(for="category") Category
+          input.form-input(id="category", type="text", name="category", placeholder="Fruit, Bakery, Meals", required)
+
+        .form-group
+          label(for="postcode") Postcode
+          input.form-input(id="postcode", type="text", name="postcode", required)
+
+        .form-group
+          label(for="quantity") Quantity
+          input.form-input(id="quantity", type="text", name="quantity", placeholder="2 loaves, 5 bags")
+
+        .form-group
+          label(for="expiry_date") Expiry date
+          input.form-input(id="expiry_date", type="date", name="expiry_date")
+
+        .form-group
+          label(for="image") Image
+          input.form-input(id="image", type="file", name="image", accept="image/*")
+
+        button.btn-submit(type="submit") Create Listing
