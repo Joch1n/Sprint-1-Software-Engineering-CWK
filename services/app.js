@@ -238,7 +238,7 @@ app.post("/create", requireLogin, upload.single("photo"), async (req, res) => {
   }
 });
  
-// ── LOCATION API ──────────────────────────────────────────────────────────────
+// location for the api
  
 app.get("/api/location", async (req, res) => {
   try {

@@ -321,6 +321,32 @@ app.get("/item/:id", requireLogin, async (req, res) => {
   }
 });
 
+app.get("/messages", requireLogin, async (req, res) => {
+  try {
+    const messages = await query(
+      `SELECT *
+       FROM messages
+       WHERE receiver_id = ? OR sender_id = ?
+       ORDER BY created_at DESC`,
+      [req.session.user.id, req.session.user.id]
+    );
+
+    res.render("messages", {
+      user: req.session.user,
+      messages
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.render("messages", {
+      user: req.session.user,
+      messages: [],
+      error: "Could not load messages"
+    });
+  }
+});
+
 app.post("/item/:id/review", requireLogin, async (req, res) => {
   try {
     const listingId = req.params.id;
