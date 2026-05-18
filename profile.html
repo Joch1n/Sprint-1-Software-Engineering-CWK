@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Profile – ZeroWaste Connect</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #2d6a4f; --green-light: #52b788; --green-pale: #d8f3dc;
+    --accent: #f4845f; --bg: #f9faf7; --text: #1b2d22; --muted: #6b8f71;
+    --white: #ffffff; --radius: 16px; --border: #e0ece3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Satoshi', sans-serif; background: var(--bg); color: var(--text); }
+
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background: var(--white); border-bottom: 1px solid var(--border); }
+  .logo { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--green); text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; }
+  .nav-links a.active { color: var(--green); font-weight: 700; }
+
+  .profile-banner { background: linear-gradient(135deg, #1b4332, #2d6a4f, #40916c); height: 180px; }
+  .profile-header { background: white; border-bottom: 1px solid var(--border); padding: 0 5% 1.5rem; }
+  .profile-top { display: flex; align-items: flex-end; gap: 1.5rem; position: relative; top: -40px; margin-bottom: -20px; }
+  .avatar { width: 90px; height: 90px; border-radius: 50%; background: var(--green-pale); border: 4px solid white; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .profile-name h1 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.6rem; font-weight: 800; }
+  .profile-name p { color: var(--muted); font-size: 0.9rem; }
+  .profile-actions { margin-left: auto; display: flex; gap: 0.8rem; align-items: center; margin-top: 2.5rem; }
+  .btn { padding: 0.55rem 1.3rem; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; text-decoration: none; border: none; font-family: 'Satoshi', sans-serif; }
+  .btn-outline { border: 2px solid var(--green); color: var(--green); background: transparent; }
+  .btn-outline:hover { background: var(--green-pale); }
+  .btn-primary { background: var(--green); color: white; }
+  .btn-primary:hover { background: #1f4d39; }
+
+  .profile-stats { display: flex; gap: 3rem; padding: 1rem 0 0; }
+  .p-stat { text-align: center; }
+  .p-stat strong { display: block; font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--green); }
+  .p-stat span { font-size: 0.8rem; color: var(--muted); }
+
+  .profile-body { max-width: 1100px; margin: 2rem auto; padding: 0 5%; display: grid; grid-template-columns: 300px 1fr; gap: 2rem; align-items: start; }
+
+  .sidebar-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.8rem; margin-bottom: 1.5rem; }
+  .sidebar-card h3 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: 1.2rem; }
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .label { color: var(--muted); }
+  .info-row .value { font-weight: 600; color: var(--text); }
+  .badge-wrap { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .badge { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.35rem 0.8rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; }
+  .badge.green { background: var(--green-pale); color: var(--green); }
+  .badge.gold { background: #fef3c7; color: #92400e; }
+  .badge.blue { background: #dbeafe; color: #1e40af; }
+
+  .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+  .tab { padding: 0.75rem 1.5rem; font-size: 0.9rem; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+  .tab.active { color: var(--green); border-bottom-color: var(--green); }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  .section-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.8rem; }
+  .section-card h3 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.1rem; font-weight: 800; margin-bottom: 1.2rem; }
+
+  .listing-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .listing-row:last-child { border-bottom: none; }
+  .listing-thumb { width: 56px; height: 56px; border-radius: 10px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+  .listing-info { flex: 1; }
+  .listing-info strong { display: block; font-size: 0.95rem; font-weight: 700; }
+  .listing-info span { font-size: 0.82rem; color: var(--muted); }
+  .status-tag { padding: 0.25rem 0.7rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
+  .status-tag.active { background: var(--green-pale); color: var(--green); }
+  .status-tag.claimed { background: #dbeafe; color: #1e40af; }
+  .status-tag.expired { background: #f3f4f6; color: #6b7280; }
+  .listing-actions { display: flex; gap: 0.5rem; }
+  .icon-btn { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--border); background: white; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
+  .icon-btn:hover { border-color: var(--green-light); }
+
+  .impact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .impact-stat { background: var(--green-pale); border-radius: 12px; padding: 1.2rem; text-align: center; }
+  .impact-stat .big { font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--green); }
+  .impact-stat p { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+  .edit-form .form-group { margin-bottom: 1.1rem; }
+  .edit-form label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .edit-form input, .edit-form textarea, .edit-form select {
+    width: 100%; padding: 0.7rem 1rem; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 0.9rem; font-family: 'Satoshi', sans-serif; color: var(--text); outline: none; background: white;
+  }
+  .edit-form input:focus, .edit-form textarea:focus { border-color: var(--green-light); box-shadow: 0 0 0 3px rgba(82,183,136,0.15); }
+  .edit-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .save-btn { padding: 0.7rem 2rem; background: var(--green); color: white; border: none; border-radius: 50px; font-weight: 700; cursor: pointer; font-family: 'Satoshi', sans-serif; margin-top: 0.5rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">ZeroWaste<span>Connect</span></a>
+  <ul class="nav-links">
+    <li><a href="listings.html">Browse Food</a></li>
+    <li><a href="post-food.html">Share Food</a></li>
+    <li><a href="profile.html" class="active">My Profile</a></li>
+  </ul>
+</nav>
+
+<div class="profile-banner"></div>
+<div class="profile-header">
+  <div class="profile-top">
+    <div class="avatar">👩‍🍳</div>
+    <div class="profile-name">
+      <h1>Sarah Okonkwo</h1>
+      <p>📍 Brixton, London · Member since Jan 2025</p>
+    </div>
+    <div class="profile-actions">
+      <button class="btn btn-outline">✏️ Edit Profile</button>
+      <a href="post-food.html" class="btn btn-primary">+ Post Food</a>
+    </div>
+  </div>
+  <div class="profile-stats">
+    <div class="p-stat"><strong>14</strong><span>Items Shared</span></div>
+    <div class="p-stat"><strong>8</strong><span>Items Claimed</span></div>
+    <div class="p-stat"><strong>3.2 kg</strong><span>Waste Saved</span></div>
+    <div class="p-stat"><strong>4.9 ⭐</strong><span>Rating</span></div>
+  </div>
+</div>
+
+<div class="profile-body">
+  <div>
+    <div class="sidebar-card">
+      <h3>About</h3>
+      <div class="info-row"><span class="label">Name</span><span class="value">Sarah Okonkwo</span></div>
+      <div class="info-row"><span class="label">Location</span><span class="value">Brixton, SW9</span></div>
+      <div class="info-row"><span class="label">Member Since</span><span class="value">January 2025</span></div>
+      <div class="info-row"><span class="label">Response Rate</span><span class="value" style="color:var(--green)">98%</span></div>
+      <div class="info-row"><span class="label">Avg. Response</span><span class="value">~30 mins</span></div>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Achievements</h3>
+      <div class="badge-wrap">
+        <span class="badge green">🌱 First Share</span>
+        <span class="badge gold">⭐ Top Donor</span>
+        <span class="badge green">♻️ 10 Items Shared</span>
+        <span class="badge blue">💬 Fast Responder</span>
+        <span class="badge gold">🏆 Community Hero</span>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="tabs">
+      <div class="tab active">My Listings</div>
+      <div class="tab">Claimed Items</div>
+      <div class="tab">Impact</div>
+      <div class="tab">Settings</div>
+    </div>
+
+    <div class="section-card" style="margin-bottom:1.5rem">
+      <h3>Active Listings</h3>
+      <div class="listing-row">
+        <div class="listing-thumb">🥦</div>
+        <div class="listing-info">
+          <strong>Mixed Vegetables</strong>
+          <span>Posted 2 hours ago · Brixton · Expiring tomorrow</span>
+        </div>
+        <span class="status-tag active">Active</span>
+        <div class="listing-actions">
+          <button class="icon-btn" title="Edit">✏️</button>
+          <button class="icon-btn" title="Delete">🗑️</button>
+        </div>
+      </div>
+      <div class="listing-row">
+        <div class="listing-thumb">🍞</div>
+        <div class="listing-info">
+          <strong>Sourdough Bread</strong>
+          <span>Posted yesterday · Brixton · Expiring today</span>
+        </div>
+        <span class="status-tag claimed">Claimed</span>
+        <div class="listing-actions">
+          <button class="icon-btn" title="View">👁️</button>
+        </div>
+      </div>
+      <div class="listing-row">
+        <div class="listing-thumb">🍎</div>
+        <div class="listing-info">
+          <strong>Apples (1kg bag)</strong>
+          <span>Posted 3 days ago · Brixton</span>
+        </div>
+        <span class="status-tag claimed">Claimed</span>
+        <div class="listing-actions">
+          <button class="icon-btn" title="View">👁️</button>
+        </div>
+      </div>
+      <div class="listing-row">
+        <div class="listing-thumb">🥛</div>
+        <div class="listing-info">
+          <strong>Oat Milk (2 cartons)</strong>
+          <span>Posted 1 week ago · Brixton</span>
+        </div>
+        <span class="status-tag expired">Expired</span>
+        <div class="listing-actions">
+          <button class="icon-btn" title="Repost">🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <h3>My Impact</h3>
+      <div class="impact-grid">
+        <div class="impact-stat"><div class="big">14</div><p>Items Shared</p></div>
+        <div class="impact-stat"><div class="big">3.2 kg</div><p>Food Saved</p></div>
+        <div class="impact-stat"><div class="big">11</div><p>Meals Enabled</p></div>
+        <div class="impact-stat"><div class="big">8</div><p>Items Claimed</p></div>
+        <div class="impact-stat"><div class="big">4.9 ⭐</div><p>Avg Rating</p></div>
+        <div class="impact-stat"><div class="big">~4 mo</div><p>Active Member</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

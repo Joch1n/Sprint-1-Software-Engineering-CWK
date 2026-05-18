@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroWaste Connect - Browse Food</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            color: white;
+            font-size: 24px;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .search-inputs {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .search-inputs input, .search-inputs select {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        .search-inputs input {
+            flex: 1;
+        }
+        
+        .search-inputs button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .food-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .food-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .food-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        
+        .food-info {
+            padding: 15px;
+        }
+        
+        .food-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .food-details {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .distance {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🌱 ZeroWaste Connect</h1>
+        <div>
+            <a href="#">Browse</a>
+            <a href="#">Post Listing</a>
+            <a href="#">Messages</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+    
+    <div class="search-bar">
+        <div class="search-inputs">
+            <input type="text" placeholder="Search food type (e.g., bread, vegetables)">
+            <select>
+                <option>Within 1km</option>
+                <option>Within 3km</option>
+                <option>Within 5km</option>
+                <option>Within 10km</option>
+            </select>
+            <button>Search</button>
+        </div>
+    </div>
+    
+    <div class="food-grid">
+        <div class="food-card">
+            <div class="food-image">🍎</div>
+            <div class="food-info">
+                <div class="food-name">Fresh Apples</div>
+                <div class="food-details">Quantity: 10 apples</div>
+                <div class="food-details">Best before: 25 Mar 2026</div>
+                <div class="distance">📍 0.5km away</div>
+            </div>
+        </div>
+        
+        <div class="food-card">
+            <div class="food-image">🍞</div>
+            <div class="food-info">
+                <div class="food-name">Homemade Bread</div>
+                <div class="food-details">Quantity: 2 loaves</div>
+                <div class="food-details">Best before: 24 Mar 2026</div>
+                <div class="distance">📍 1.2km away</div>
+            </div>
+        </div>
+        
+        <div class="food-card">
+            <div class="food-image">🥕</div>
+            <div class="food-info">
+                <div class="food-name">Fresh Vegetables</div>
+                <div class="food-details">Quantity: Mixed bag</div>
+                <div class="food-details">Best before: 26 Mar 2026</div>
+                <div class="distance">📍 2.1km away</div>
+            </div>
+        </div>
+        
+        <div class="food-card">
+            <div class="food-image">🧀</div>
+            <div class="food-info">
+                <div class="food-name">Cheese Selection</div>
+                <div class="food-details">Quantity: 500g</div>
+                <div class="food-details">Best before: 30 Mar 2026</div>
+                <div class="distance">📍 0.8km away</div>
+            </div>
+        </div>
+        
+        <div class="food-card">
+            <div class="food-image">🥛</div>
+            <div class="food-info">
+                <div class="food-name">Dairy Products</div>
+                <div class="food-details">Quantity: 2 liters milk</div>
+                <div class="food-details">Best before: 27 Mar 2026</div>
+                <div class="distance">📍 1.5km away</div>
+            </div>
+        </div>
+        
+        <div class="food-card">
+            <div class="food-image">🍝</div>
+            <div class="food-info">
+                <div class="food-name">Pasta & Sauce</div>
+                <div class="food-details">Quantity: 1 pack</div>
+                <div class="food-details">Best before: 31 Dec 2026</div>
+                <div class="distance">📍 3.2km away</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Post Food – ZeroWaste Connect</title>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #2d6a4f; --green-light: #52b788; --green-pale: #d8f3dc;
+    --accent: #f4845f; --bg: #f9faf7; --text: #1b2d22; --muted: #6b8f71;
+    --white: #ffffff; --radius: 16px; --border: #e0ece3;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Satoshi', sans-serif; background: var(--bg); color: var(--text); }
+
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 5%; background: var(--white); border-bottom: 1px solid var(--border); }
+  .logo { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--green); text-decoration: none; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; }
+  .nav-links a.active { color: var(--green); font-weight: 700; }
+
+  .page-header { background: linear-gradient(135deg, #40916c, #52b788); color: white; padding: 3rem 5%; }
+  .page-header h1 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .page-header p { opacity: 0.85; }
+
+  .page-body { max-width: 900px; margin: 3rem auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 340px; gap: 2rem; align-items: start; }
+
+  .form-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 2.5rem; }
+  .form-card h2 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 1.3rem; font-weight: 800; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+
+  .form-section { margin-bottom: 2rem; }
+  .form-section h3 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 1.2rem; }
+
+  .form-group { margin-bottom: 1.2rem; }
+  label { display: block; font-size: 0.87rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--text); }
+  .required { color: var(--accent); }
+  input[type="text"], input[type="date"], input[type="number"], input[type="time"], select, textarea {
+    width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 0.95rem; font-family: 'Satoshi', sans-serif; background: white; color: var(--text);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none; resize: vertical;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--green-light); box-shadow: 0 0 0 3px rgba(82,183,136,0.15); }
+  textarea { min-height: 100px; }
+  .hint { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .upload-area {
+    border: 2px dashed var(--border); border-radius: 12px; padding: 2rem;
+    text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  }
+  .upload-area:hover { border-color: var(--green-light); background: var(--green-pale); }
+  .upload-area .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .upload-area p { font-size: 0.9rem; color: var(--muted); }
+  .upload-area strong { color: var(--green); }
+
+  .dietary-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .diet-tag { display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.9rem; border: 1.5px solid var(--border); border-radius: 50px; font-size: 0.85rem; cursor: pointer; background: white; transition: all 0.2s; }
+  .diet-tag input { accent-color: var(--green); }
+  .diet-tag:has(input:checked) { background: var(--green-pale); border-color: var(--green-light); color: var(--green); font-weight: 600; }
+
+  .collection-options { display: flex; flex-direction: column; gap: 0.8rem; }
+  .collection-opt { display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; background: white; transition: all 0.2s; }
+  .collection-opt input { accent-color: var(--green); }
+  .collection-opt:has(input:checked) { background: var(--green-pale); border-color: var(--green-light); }
+  .collection-opt .opt-label strong { display: block; font-size: 0.9rem; font-weight: 600; }
+  .collection-opt .opt-label span { font-size: 0.8rem; color: var(--muted); }
+
+  .btn-submit {
+    width: 100%; padding: 1rem; background: var(--green); color: white; border: none;
+    border-radius: 50px; font-size: 1.05rem; font-weight: 700; cursor: pointer;
+    font-family: 'Satoshi', sans-serif; margin-top: 1rem; transition: all 0.2s;
+  }
+  .btn-submit:hover { background: #1f4d39; box-shadow: 0 8px 24px rgba(45,106,79,0.3); transform: translateY(-1px); }
+  .btn-draft { width: 100%; padding: 0.75rem; background: white; color: var(--green); border: 2px solid var(--green); border-radius: 50px; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: 'Satoshi', sans-serif; margin-top: 0.7rem; }
+
+  .tips-card { background: white; border-radius: var(--radius); border: 1px solid var(--border); padding: 1.8rem; position: sticky; top: 100px; }
+  .tips-card h3 { font-family: 'Cabinet Grotesk', sans-serif; font-size: 1rem; font-weight: 800; margin-bottom: 1.2rem; }
+  .tip { display: flex; gap: 0.8rem; margin-bottom: 1.1rem; }
+  .tip-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .tip-text strong { display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .tip-text span { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .impact-box { background: var(--green-pale); border-radius: 12px; padding: 1.2rem; margin-top: 1.5rem; text-align: center; }
+  .impact-box .big { font-family: 'Cabinet Grotesk', sans-serif; font-size: 2rem; font-weight: 800; color: var(--green); }
+  .impact-box p { font-size: 0.82rem; color: var(--muted); margin-top: 0.2rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">ZeroWaste<span>Connect</span></a>
+  <ul class="nav-links">
+    <li><a href="listings.html">Browse Food</a></li>
+    <li><a href="post-food.html" class="active">Share Food</a></li>
+    <li><a href="profile.html">My Profile</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <h1>Share Your Food</h1>
+  <p>List surplus food so your community can make the most of it</p>
+</div>
+
+<div class="page-body">
+  <div class="form-card">
+    <h2>Create a Food Listing</h2>
+
+    <div class="form-section">
+      <h3>Basic Information</h3>
+      <div class="form-group">
+        <label>Food Name <span class="required">*</span></label>
+        <input type="text" placeholder="e.g. Sourdough Loaf, Mixed Vegetables, Chicken Portions"/>
+      </div>
+      <div class="form-group">
+        <label>Category <span class="required">*</span></label>
+        <select>
+          <option value="">Select a category</option>
+          <option>Bakery & Bread</option>
+          <option>Fruits & Vegetables</option>
+          <option>Dairy & Eggs</option>
+          <option>Meat & Fish</option>
+          <option>Cooked Meals</option>
+          <option>Snacks & Confectionery</option>
+          <option>Drinks</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Description <span class="required">*</span></label>
+        <textarea placeholder="Describe the food — quantity, condition, how it's packaged, any allergens…"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="text" placeholder="e.g. 1 loaf, 500g, 4 portions"/>
+        </div>
+        <div class="form-group">
+          <label>Best Before / Use By <span class="required">*</span></label>
+          <input type="date"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Photos</h3>
+      <div class="upload-area">
+        <div class="upload-icon">📷</div>
+        <p><strong>Click to upload photos</strong> or drag and drop</p>
+        <p style="font-size:0.8rem; margin-top:0.3rem">PNG, JPG up to 5MB each · Max 4 photos</p>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Dietary Information</h3>
+      <div class="dietary-tags">
+        <label class="diet-tag"><input type="checkbox"/> 🌿 Vegetarian</label>
+        <label class="diet-tag"><input type="checkbox"/> 🌱 Vegan</label>
+        <label class="diet-tag"><input type="checkbox"/> 🌾 Gluten-Free</label>
+        <label class="diet-tag"><input type="checkbox"/> 🥛 Dairy-Free</label>
+        <label class="diet-tag"><input type="checkbox"/> ☪️ Halal</label>
+        <label class="diet-tag"><input type="checkbox"/> ✡️ Kosher</label>
+        <label class="diet-tag"><input type="checkbox"/> 🥜 Nut-Free</label>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Collection Details</h3>
+      <div class="form-group">
+        <label>Postcode / Area <span class="required">*</span></label>
+        <input type="text" placeholder="e.g. SW9 or Brixton (exact address shared privately)"/>
+        <p class="hint">Only your area is shown publicly — full address shared when someone claims</p>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Available From</label>
+          <input type="time" value="09:00"/>
+        </div>
+        <div class="form-group">
+          <label>Available Until</label>
+          <input type="time" value="20:00"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Collection Method</label>
+        <div class="collection-options">
+          <label class="collection-opt">
+            <input type="radio" name="collection" checked/>
+            <div class="opt-label"><strong>🏠 Doorstep Pickup</strong><span>Collector comes to your address</span></div>
+          </label>
+          <label class="collection-opt">
+            <input type="radio" name="collection"/>
+            <div class="opt-label"><strong>📍 Meet at Location</strong><span>Arrange a public meeting point</span></div>
+          </label>
+          <label class="collection-opt">
+            <input type="radio" name="collection"/>
+            <div class="opt-label"><strong>🔑 Leave Outside</strong><span>Leave food outside for self-collection</span></div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-submit">🌿 Publish Listing</button>
+    <button class="btn-draft">Save as Draft</button>
+  </div>
+
+  <div class="tips-card">
+    <h3>💡 Tips for a great listing</h3>
+    <div class="tip">
+      <div class="tip-icon">📸</div>
+      <div class="tip-text"><strong>Add a photo</strong><span>Listings with photos get 3x more responses</span></div>
+    </div>
+    <div class="tip">
+      <div class="tip-icon">📝</div>
+      <div class="tip-text"><strong>Be specific</strong><span>Include quantity, packaging and any allergens in your description</span></div>
+    </div>
+    <div class="tip">
+      <div class="tip-icon">⏰</div>
+      <div class="tip-text"><strong>Set a deadline</strong><span>Let people know how urgent the collection is</span></div>
+    </div>
+    <div class="tip">
+      <div class="tip-icon">✅</div>
+      <div class="tip-text"><strong>Respond quickly</strong><span>Replying fast helps food get collected before it spoils</span></div>
+    </div>
+    <div class="impact-box">
+      <div class="big">850 kg</div>
+      <p>of food waste prevented by our community this year</p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
